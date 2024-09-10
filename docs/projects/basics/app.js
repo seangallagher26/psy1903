@@ -17,3 +17,5 @@ let correct = true;
 console.log(typeof correct);
 
 console.log(10 <= 15); // true
+
+// update to practice commit

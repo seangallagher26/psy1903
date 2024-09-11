@@ -29,3 +29,8 @@ alert('You answered ' + response3 + ' in ' + responseTime3 + ' seconds');
 
 alert("Thank you for your participation!")
 
+
+const courseName = "Programming for Psychologists";
+console.log(courseName.toUpperCase());
+console.log(courseName.indexOf("Psychologists"));
+console.log(courseName.replace("Programming", "Coding"));

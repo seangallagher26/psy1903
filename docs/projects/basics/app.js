@@ -42,8 +42,14 @@ console.log(response2)
 you also don't need to use the let keyword! But it is a good practice, and 
 we will run into 'scope' later on down the line... so keep using it */
 
+
 const courseName = "Programming for Psychologists";
 console.log(courseName.toUpperCase());
 console.log(courseName.indexOf("Psychologists"));
 console.log(courseName.replace("Programming", "Coding"));
+
+
+
+
+
 

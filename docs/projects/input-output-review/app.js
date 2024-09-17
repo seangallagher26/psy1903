@@ -34,3 +34,8 @@ form.addEventListener('submit', function (event) {
     //hide the form, incl. instructions
     form.style.display = 'none';
 });
+
+let count = 8;
+console.log(count % 2 == 0);
+
+

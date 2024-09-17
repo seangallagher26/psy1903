@@ -17,7 +17,7 @@ if (response == correctAnswer) {
 alert(feedback + ' The correct answer is ' + correctAnswer + '!');
 */
 
-let age = prompt('How old are you?');
+/* let age = prompt('How old are you?');
 if (age < 12) {
     alert('Child');
 }
@@ -26,4 +26,13 @@ if (age >= 12 && age < 18) {
 }
 if (age >= 18) {
     alert('Adult');
+}
+*/
+
+let response2 = prompt('Enter A Whole Number')
+
+if (response2 % 2 == 0) {
+    alert("You entered a even number.")
+} else {
+    alert("You entered an odd number.")
 }

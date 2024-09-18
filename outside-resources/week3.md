@@ -8,3 +8,4 @@ Outside sites
 
 Link any outside sites you referenced this week. You should exclude any resources/links that were provided in the course material. If you did not use any outside resources this week, simply note "None"
 
+None

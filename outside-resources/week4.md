@@ -14,6 +14,14 @@ function getOddNumbers(numbers) {
     return results;
 }
 
+why is my data not showing up in this object? 
+    return data.push {
+    number: num1,
+    response: response,
+    correct: answer,
+    responseTime: responseTime
+}
+
 console.log(getOddNumbers([1, 2, 3, 4, 5]))
 
 Outside sites

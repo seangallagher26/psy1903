@@ -43,7 +43,7 @@ let words = ['apple', 'banana', 'cherry', 'pear', 'grape'];
 console.log(getLongestWord(words)); */
 
 
-function getOddNumbers(numbers) {
+/* function getOddNumbers(numbers) {
     let results = [];
     for (let i = 0; i < numbers.length; i++) {
         if (numbers[i] % 2 != 0) {
@@ -53,4 +53,23 @@ function getOddNumbers(numbers) {
     return results;
 }
 
-console.log(getOddNumbers([1, 2, 3, 4, 5]))
+console.log(getOddNumbers([1, 2, 3, 4, 5])) */
+
+function filterNumbers(numbers, evenOrOdd) {
+    let results = [];
+    if (evenOrOdd == 'even') {
+        for (let i = 0; i < numbers.length; i++) {
+            if (numbers[i] % 2 == 0) {
+                results[results.length] = numbers[i];
+            }
+        }
+    } else {
+        for (let i = 0; i < numbers.length; i++) {
+            if (numbers[i] % 2 != 0) {
+                results[results.length] = numbers[i];
+            }
+        }
+    }
+    return results
+}
+console.log(filterNumbers([45, 10, 11, 61], 'odd'))

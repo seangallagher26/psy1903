@@ -40,6 +40,7 @@ for (let block of conditions) {
                 blockId: block.title,
             },
             on_finish: function (data) {
+                data.response = data.response.userInput
                 if (data.response.userInput == question.answer) {
                     data.correct = true;
                 } else {

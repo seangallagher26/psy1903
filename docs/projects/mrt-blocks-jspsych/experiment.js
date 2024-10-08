@@ -59,12 +59,14 @@ for (let block of conditions) {
                 blockId: block.title,
             },
             on_finish: function (data) {
-                data.response = data.response.userInput
-                if (data.response.userInput == question.answer) {
+                data.response = data.response.userInput;
+                if (data.response == question.answer) {
                     data.correct = true;
                 } else {
                     data.correct = false;
                 }
+
+
 
             }
         }
@@ -72,6 +74,53 @@ for (let block of conditions) {
     }
 }
 
+// save results
+let resultsTrial = {
+    type: jsPsychHtmlKeyboardResponse,
+    choices: ['NO KEYS'],
+    async: false,
+    stimulus: `
+        <h1>Please wait...</h1>
+        <p>We are saving the results of your inputs.</p>
+        `,
+    on_start: function () {
+        let prefix = 'mrt';
+        let dataPipeExperimentId = 'your-experiment-id-here';
+        let forceOSFSave = false;
+
+        let results = jsPsych.data
+            .get()
+            .filter({ collect: true })
+            .ignore(['stimulus', 'trial_type', 'trial_index', 'plugin_version', 'collect'])
+            .csv();
+
+        let participantId = new Date().toISOString().replace(/T/, '-').replace(/\..+/, '').replace(/:/g, '-');
+
+        let isLocalHost = window.location.href.includes('localhost');
+
+        let destination = '/save';
+        if (!isLocalHost || forceOSFSave) {
+            destination = 'https://pipe.jspsych.org/api/data/';
+        }
+
+        fetch(destination, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: '*/*',
+            },
+            body: JSON.stringify({
+                experimentID: dataPipeExperimentId,
+                filename: prefix + '-' + participantId + '.csv',
+                data: results,
+            }),
+        }).then(data => {
+            console.log(data);
+            jsPsych.finishTrial();
+        })
+    }
+}
+timeline.push(resultsTrial);
 
 //debrief
 let debriefTrial = {
@@ -81,14 +130,6 @@ let debriefTrial = {
     <p>You can now close this tab.</p>
     `,
     choices: 'NO_KEYS',
-    on_start: function () {
-        let data = jsPsych.data
-            .get()
-            .filter({ collect: true })
-            .ignore(['stimulus', 'trial_type', 'trial_index', 'plugin_version', 'collect'])
-            .csv();
-        console.log(data);
-    }
 };
 timeline.push(debriefTrial);
 

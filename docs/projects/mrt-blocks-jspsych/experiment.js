@@ -15,6 +15,25 @@ let welcomeTrial = {
 
 timeline.push(welcomeTrial);
 
+// survey
+let likert = [
+    "Strongly Disagree",
+    "Disagree",
+    "Netural",
+    "Agree",
+    "Strongly Agree"
+];
+
+let survey = {
+    type: jsPsychSurveyLikert,
+    questions: [
+        { prompt: "I enjoy solving math problems.", labels: likert },
+        { prompt: "I find math easy.", labels: likert }
+    ]
+}
+
+timeline.push(survey);
+
 //set up blocks
 for (let block of conditions) {
     let blockIntroTrial = {

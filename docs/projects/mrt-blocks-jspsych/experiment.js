@@ -85,8 +85,8 @@ let resultsTrial = {
         `,
     on_start: function () {
         let prefix = 'mrt';
-        let dataPipeExperimentId = 'your-experiment-id-here';
-        let forceOSFSave = false;
+        let dataPipeExperimentId = '0vmGxqE7UWbw';
+        let forceOSFSave = true;
 
         let results = jsPsych.data
             .get()

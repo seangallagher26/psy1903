@@ -38,7 +38,7 @@ let primerTrial = {
     },
 }
 
-timeline.push(primerTrial);
+// timeline.push(primerTrial);
 
 //IAT
 let iatInstructions = {
@@ -46,13 +46,13 @@ let iatInstructions = {
     preamble: `
     <h1>Part 2</h1>
     <p>You will now complete the IAT.</p>
-    <p>You will use the 'F' and 'J' computer keys to categorize items into groups as fast as you can.</p>
+    <p>You will use the <span class='key'>'F'</span> and <span class='key'>'J'</span> computer keys to categorize items into groups as fast as you can.</p>
     <p>These are the four groups and the items that belong to each:</p>
     <p> </p>
-    <p>Male: Man, Son, Father, Boy, Uncle, Grandpa, Husband, Male, Gentleman, Brother</p>
-    <p>Female: Mother, Wife, Aunt, Woman, Girl, Female, Grandma, Daughter, Sister, Lady</p>
-    <p>Science: Astronomy, Math, Chemistry, Physics, Biology, Geology, Engineering, Robotics, Ecology, Statistics</p>
-    <p>Liberal Arts: History, Arts, Humanities, English, Philosophy, Music, Literature, Anthropology, Dance, Sociology</p>
+    <p><span class='bold'>Male:</span> Man, Son, Father, Boy, Uncle, Grandpa, Husband, Male, Gentleman, Brother</p>
+    <p><span class='bold'>Female:</span> Mother, Wife, Aunt, Woman, Girl, Female, Grandma, Daughter, Sister, Lady</p>
+    <p><span class='bold'>Science:</span> Astronomy, Math, Chemistry, Physics, Biology, Geology, Engineering, Robotics, Ecology, Statistics</p>
+    <p><span class='bold'>Liberal Arts</span>: History, Arts, Humanities, English, Philosophy, Music, Literature, Anthropology, Dance, Sociology</p>
     `
 }
 timeline.push(iatInstructions);
@@ -64,26 +64,45 @@ for (let condition of conditions) {
         type: jsPsychHtmlKeyboardResponse,
         stimulus: `
             <h1><span class = 'title'>Part ${iteration} of 4</span></h1>
-            <p>You will see words related to the following categories: ${condition.categories[0]} and ${condition.categories[1]}</p>
-            <p>Press space to begin.</p>
+            <p>You will see words related to the following categories: <span class='bold'>${condition.categories[0]}</span> and <span class='bold'>${condition.categories[1]}</span></p>
+            <p>Press <span class='key'>space</span> to begin.</p>
             `,
         choices: [' '],
     };
     timeline.push(blockInstructions);
-    console.log(condition.trials);
-    for (i = 0; i < 36; i++) {
+
+    for (trial of condition.trials) {
+
+        console.log(trial);
+
         let wordDisplay = {
             type: jsPsychHtmlKeyboardResponse,
+
             stimulus: `
          <p><span class='category1'>Press <span class='key'>f</span> for ${condition.categories[0]}</span><p>
          <p><span class='category2'>Press <span class='key'>j</span> for ${condition.categories[1]}</span><p>
-         <h1><span class = 'target'>${condition.trials[iteration - 1].word}</span></h1>
+         <h1><span class = 'target'>${trial.word}</span></h1>
         `,
+            data: {
+                collect: true,
+            },
             choices: ['f', 'j'],
+            on_finish: function (data) {
+
+                console.log('data.response:', data.response);
+                console.log('trial.expectedResponse:', trial.expectedResponse);
+                if (data.response == trial.expectedResponse) {
+                    data.correct = true;
+                } else {
+                    data.correct = false;
+                }
+                console.log('data:', data.correct);
+            }
+
         }
         timeline.push(wordDisplay);
-    }
 
+    }
 }
 
 //Likert

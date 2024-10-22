@@ -4,3 +4,23 @@
     display: inline-block;
     padding: 5px 10px;
 }
+
+.bold {
+    font-weight: bold;
+}
+
+.left {
+    text-align: left;
+}
+
+.category1 {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.category2 {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}

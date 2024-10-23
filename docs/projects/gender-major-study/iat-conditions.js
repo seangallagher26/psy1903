@@ -12,7 +12,7 @@ let blocksB = [
 // There should be 10 words per category
 let words = {
     men: ['Man', 'Son', 'Father', 'Boy', 'Uncle', 'Grandpa', 'Husband', 'Male', 'Gentleman', 'Brother'],
-    women: ['Mother', 'Wife', 'Aunt', 'Woman', 'Girl', 'Female', 'Grandma', 'Daughter', 'Sister', 'Lday'],
+    women: ['Mother', 'Wife', 'Aunt', 'Woman', 'Girl', 'Female', 'Grandma', 'Daughter', 'Sister', 'Lady'],
     science: ['Astronomy', 'Math', 'Chemistry', 'Physics', 'Biology', 'Geology', 'Engineering', 'Robotics', 'Ecology', 'Statistics'],
     "liberal arts": ['History', 'Arts', 'Humanities', 'English', 'Philosophy', 'Music', 'Literature', 'Anthropology', 'Dance', 'Sociology'],
 };

@@ -13,5 +13,9 @@
     animation: rotation 1s linear infinite;
 } how do I make this spin?
 
+what is a real world  experiment that could use the categorize-animation jspsych plugin
+
+social psychology (as a response to what area I am interested in)
+
 ## Outside sites
 None

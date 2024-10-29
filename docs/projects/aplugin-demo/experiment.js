@@ -1,6 +1,19 @@
 let jsPsych = initJsPsych();
 let timeline = [];
 
+let images = [
+    'img/interaction_1.jpg',
+    'img/interaction_2.jpg',
+    'img/interaction_3.jpg',
+    'img/interaction_4.jpg'
+];
+
+let preload = {
+    type: jsPsychPreload,
+    images: images
+}
+
+timeline.push(preload);
 
 let welcomeTrial = {
     type: jsPsychHtmlKeyboardResponse,
@@ -17,14 +30,8 @@ timeline.push(welcomeTrial);
 
 var animation_trial = {
     type: jsPsychCategorizeAnimation,
-    stimuli: [
-        'img/interaction_1.jpg',
-        'img/interaction_2.jpg',
-        'img/interaction_3.jpg',
-        'img/interaction_4.jpg'
-    ],
+    stimuli: images,
     prompt: `
-    <img src='img/interaction_1.jpg'>
     <p>If you think the triangle likes the circle, press the <span class='key'>P</span> key.</p>
     <p>If you think the triangle feels neutrally about the circle, press the <span class='key'>T</span> key.</p>
     <p>If you think the triangle dislikes the circle, press the <span class='key'>Q</span> key.</p>

@@ -5,41 +5,13 @@
     padding: 5px 10px;
 }
 
-.bold {
-    font-weight: bold;
+.jspsych-display-element input[type=text] {
+    font-size: 36px;
+    text-align: center;
+    width: 100px;
 }
 
-.left {
-    text-align: left;
-}
-
-.category1 {
-    position: absolute;
-    top: 100px;
-    left: 200px;
-}
-
-.category2 {
-    position: absolute;
-    top: 100px;
-    right: 200px;
-}
-
-.story {
-    background-color: #d3d3d3;
-    padding: 10px;
-    border-radius: 25px;
-}
-
-.custom-bullets {
-    content: '•';
-    position: relative;
-    color: black;
-    font-size: 20px;
-    text-align: left;
-}
-
-.loading {
+.loader {
     width: 48px;
     height: 48px;
     border: 5px solid #000;

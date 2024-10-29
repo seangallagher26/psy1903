@@ -1,9 +1,8 @@
-//we need to push all of the data after each trial to jsPsych.data
 let jsPsych = initJsPsych();
 let timeline = [];
 
-//welcome
 
+//welcome
 let enterFullScreenTrial = {
     type: jsPsychFullscreen,
     fullscreen_mode: true
@@ -30,7 +29,7 @@ let welcomeTrial = {
 timeline.push(welcomeTrial);
 
 //Primer
-let primer = ['sterotypical', 'atypical'];
+let primer = ['stereotypical', 'atypical'];
 let primerDisplay = primer[Math.floor(Math.random() * primer.length)];
 
 let primerTrial = {
@@ -49,10 +48,11 @@ let primerTrial = {
         { prompt: "Please write 2 observations in the textbox below." }
     ],
     data: {
-        collect: true,
+        collect: true
     },
     on_finish: function (data) {
         data.whichPrime = primerDisplay;
+        data.trialType = "prime"
     },
 }
 
@@ -70,16 +70,20 @@ let iatInstructions = {
 }
 timeline.push(iatInstructions);
 
-let iteration = 0
+let iteration = 0;
+
+
 for (let condition of conditions) {
+    let leftCategory = condition.categories[0];
+    let rightCategory = condition.categories[1];
     iteration++;
     let blockInstructions = {
         type: jsPsychHtmlKeyboardResponse,
         stimulus: `
             <h1><span class = 'title'>Part ${iteration} of 4</span></h1>
-            <p>In this part, the two categories will be <span class='bold'>${condition.categories[0]}</span> and <span class='bold'>${condition.categories[1]}</span></p>
-            <p>If the word you see in the middle of the screen should be sorted into the <span class='bold'>${condition.categories[0]}</span> category, press the <span class='key'>F</span> key.</p>
-            <p>If the word you see in the middle of the screen should be sorted into the <span class='bold'>${condition.categories[1]}</span> category, press the <span class='key'>J</span> key.</p>
+            <p>In this part, the two categories will be <span class='bold'>${leftCategory}</span> and <span class='bold'>${rightCategory}</span></p>
+            <p>If the word you see in the middle of the screen should be sorted into the <span class='bold'>${leftCategory}</span> category, press the <span class='key'>F</span> key.</p>
+            <p>If the word you see in the middle of the screen should be sorted into the <span class='bold'>${rightCategory}</span> category, press the <span class='key'>J</span> key.</p>
             <p>Press the <span class='key'>SPACE</span> key to begin.</p>
             `,
         choices: [' '],
@@ -93,16 +97,19 @@ for (let condition of conditions) {
             type: jsPsychHtmlKeyboardResponse,
 
             stimulus: `
-         <p><span class='category1'>Press <span class='key'>f</span> for ${condition.categories[0]}</span><p>
-         <p><span class='category2'>Press <span class='key'>j</span> for ${condition.categories[1]}</span><p>
+         <p><span class='category1'>Press <span class='key'>f</span> for ${leftCategory}</span><p>
+         <p><span class='category2'>Press <span class='key'>j</span> for ${rightCategory}</span><p>
          <h1><span class = 'target'>${trial.word}</span></h1>
         `,
 
             data: {
                 collect: true,
                 word: trial.word,
-                expectedCategory: trial.category, //fix this, its collecting the word but not the category
-                expectedCategoryAsDisplayed: trial //??
+                expectedCategory: trial.expectedCategory,
+                expectedCategoryAsDisplayed: trial.expectedCategoryAsDisplayed,
+                trialType: "iat",
+                leftCategory: leftCategory,
+                rightCategory: rightCategory,
             },
             choices: ['f', 'j'],
             on_finish: function (data) {
@@ -112,10 +119,6 @@ for (let condition of conditions) {
                     data.correct = false;
                 }
             },
-            /*on_finish: function (data) {
-                data.word = trial.word;
-                data.expectedCategory = condition.categories; //fix this
-            },*/
         }
         let fixationScreen = {
             type: jsPsychHtmlKeyboardResponse,
@@ -160,6 +163,7 @@ let survey = {
     ],
     data: {
         collect: true,
+        trialType: "questionnaire"
     },
 }
 
@@ -179,14 +183,14 @@ let resultsTrial = {
         `,
     on_start: function () {
         let prefix = 'gender-major-iat';
-        //need to go back to vid and check this:
-        let dataPipeExperimentId = '0vmGxqE7UWbw';
+
+        let dataPipeExperimentId = '4TryNtw5s4zT';
         let forceOSFSave = true;
 
         let results = jsPsych.data
             .get()
             .filter({ collect: true })
-            .ignore(['plugin_version', 'collect', 'time_elapsed'])
+            .ignore(['plugin_version', 'collect', 'trial_type', 'stimulus'])
             .csv();
         let participantId = new Date().toISOString().replace(/T/, '-').replace(/\..+/, '').replace(/:/g, '-');
 
@@ -197,8 +201,8 @@ let resultsTrial = {
             destination = 'https://pipe.jspsych.org/api/data/';
         }
 
-        // Send the results to our saving end point
-        fetch(destination, { //allows us to send data to some end point
+
+        fetch(destination, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

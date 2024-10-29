@@ -1,18 +1,14 @@
 let jsPsych = initJsPsych();
 let timeline = [];
 
-
-let queryString = new URLSearchParams(window.location.search);
-let qualtricsId = queryString.get('qualtricsId');
-console.log(qualtricsId);
-jsPsych.data.addProperties({ qualtricsId: qualtricsId });
-
 let images = [
     'img/interaction_1.jpg',
     'img/interaction_2.jpg',
     'img/interaction_3.jpg',
     'img/interaction_4.jpg'
 ];
+
+let participantId = getCurrentTimestamp();
 
 let preload = {
     type: jsPsychPreload,
@@ -75,9 +71,7 @@ let resultsTrial = {
         console.log(results);
 
         let prefix = 'plugin-demo';
-        let dataPipeExperimentId = '';
-        let forceOSFSave = false;
-        let participantId = getCurrentTimestamp();
+
         let fileName = prefix + '-' + participantId + '.csv';
 
         saveResults(fileName, results, dataPipeExperimentId = '', forceOSFSave = false).then(response => {
@@ -92,7 +86,7 @@ let debriefTrial = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `
     <h1>Thank you for your participation!</h1> 
-    <p>You can now close this tab.</p>
+    <a href='https://harvard.az1.qualtrics.com/jfe/form/SV_eRsXfG5xFS33IQm?experimentParticipantId=${participantId}'>Please follow this link and complete the survey...</a>
     `,
     choices: 'NO_KEYS',
 };

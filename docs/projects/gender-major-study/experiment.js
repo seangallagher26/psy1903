@@ -1,4 +1,7 @@
-let jsPsych = initJsPsych();
+let jsPsych = initJsPsych({
+    show_progress_bar: true
+});
+
 let timeline = [];
 
 
@@ -237,6 +240,9 @@ let debriefTrial = {
     <p>You can now close this tab.</p>
     `,
     choices: 'NO_KEYS',
+    on_start: function () {
+        jsPsych.progressBar.progress = 1;
+    }
 };
 timeline.push(debriefTrial);
 

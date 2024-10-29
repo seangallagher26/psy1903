@@ -94,4 +94,6 @@ jsPsych.run(timeline);
 ```
 
 ## Outside sites
-None
++ https://www-jstor-org.ezp-prod1.hul.harvard.edu/stable/1416950?origin=crossref&seq=1
+
++ https://blog.surveyplanet.com/how-to-use-demographic-survey-questions-examples-and-phrasing-guidelines

@@ -24,6 +24,9 @@ let welcomeTrial = {
     <p>Press the <span class='key'>SPACE</span> key to begin.</p>
     `,
     choices: [' '],
+    data: {
+        collect: true
+    },
 };
 
 timeline.push(welcomeTrial);
@@ -38,6 +41,9 @@ var animation_trial = {
     `,
     choices: ['p', 't', 'q'],
     key_answer: 't',
+    data: {
+        collect: true
+    },
 };
 
 timeline.push(animation_trial);
@@ -75,5 +81,16 @@ let resultsTrial = {
     }
 }
 timeline.push(resultsTrial);
+
+let debriefTrial = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: `
+    <h1>Thank you for your participation!</h1> 
+    <p>You can now close this tab.</p>
+    `,
+    choices: 'NO_KEYS',
+};
+timeline.push(debriefTrial);
+console.log(resultsTrial);
 
 jsPsych.run(timeline);

@@ -4,7 +4,6 @@ let jsPsych = initJsPsych({
 
 let timeline = [];
 
-
 //welcome
 let enterFullScreenTrial = {
     type: jsPsychFullscreen,

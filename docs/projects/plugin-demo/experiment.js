@@ -1,6 +1,12 @@
 let jsPsych = initJsPsych();
 let timeline = [];
 
+
+let queryString = new URLSearchParams(window.location.search);
+let qualtricsId = queryString.get('qualtricsId');
+console.log(qualtricsId);
+jsPsych.data.addProperties({ qualtricsId: qualtricsId });
+
 let images = [
     'img/interaction_1.jpg',
     'img/interaction_2.jpg',

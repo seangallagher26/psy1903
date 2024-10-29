@@ -1,7 +1,15 @@
+//we need to push all of the data after each trial to jsPsych.data
 let jsPsych = initJsPsych();
 let timeline = [];
 
 //welcome
+
+let enterFullScreenTrial = {
+    type: jsPsychFullscreen,
+    fullscreen_mode: true
+};
+
+timeline.push(enterFullScreenTrial);
 
 let welcomeTrial = {
     type: jsPsychHtmlKeyboardResponse,
@@ -19,39 +27,44 @@ let welcomeTrial = {
     choices: [' '],
 };
 
-//timeline.push(welcomeTrial);
+timeline.push(welcomeTrial);
 
 //Primer
 let primer = ['sterotypical', 'atypical'];
 let primerDisplay = primer[Math.floor(Math.random() * primer.length)];
 
 let primerTrial = {
-    type: jsPsychSurveyHtmlForm,
+    type: jsPsychSurveyText,
     preamble: `
     <h1>Task 1 of 3</h1>
     <p>Consider the following image:</p>
     <div class='story'>
     <img src='images/${primerDisplay}.png'>
     </div>
-    <p>Please write 2 observations in the textbox below.</p>
     `,
     html: `<p><input type='text' name ='answer' id='answer'></p>`,
     autofocus: 'answer',
     button_label: 'Continue',
+    questions: [
+        { prompt: "Please write 2 observations in the textbox below." }
+    ],
+    data: {
+        collect: true,
+    },
     on_finish: function (data) {
         data.whichPrime = primerDisplay;
     },
 }
 
-//timeline.push(primerTrial);
+timeline.push(primerTrial);
 
 //IAT
 let iatInstructions = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `
     <h1>Task 2 of 3</h1>
-    <p>In this final task, you will be shown a series of words and asked to sort them into categories.</p>
-    <p>Press the <span class='key'>SPACE</span> to begin.
+    <p>In this next task, you will be shown a series of words and asked to sort them into categories.</p>
+    <p>Press <span class='key'>SPACE</span> to begin.
     `,
     choices: [' '],
 }
@@ -67,11 +80,12 @@ for (let condition of conditions) {
             <p>In this part, the two categories will be <span class='bold'>${condition.categories[0]}</span> and <span class='bold'>${condition.categories[1]}</span></p>
             <p>If the word you see in the middle of the screen should be sorted into the <span class='bold'>${condition.categories[0]}</span> category, press the <span class='key'>F</span> key.</p>
             <p>If the word you see in the middle of the screen should be sorted into the <span class='bold'>${condition.categories[1]}</span> category, press the <span class='key'>J</span> key.</p>
-            <p>Press the<span class='key'>SPACE</span> key to begin.</p>
+            <p>Press the <span class='key'>SPACE</span> key to begin.</p>
             `,
         choices: [' '],
     };
     timeline.push(blockInstructions);
+
 
     for (let trial of condition.trials) {
 
@@ -86,6 +100,9 @@ for (let condition of conditions) {
 
             data: {
                 collect: true,
+                word: trial.word,
+                expectedCategory: trial.category, //fix this, its collecting the word but not the category
+                expectedCategoryAsDisplayed: trial //??
             },
             choices: ['f', 'j'],
             on_finish: function (data) {
@@ -94,8 +111,11 @@ for (let condition of conditions) {
                 } else {
                     data.correct = false;
                 }
-                console.log(data.correct)
-            }
+            },
+            /*on_finish: function (data) {
+                data.word = trial.word;
+                data.expectedCategory = condition.categories; //fix this
+            },*/
         }
         let fixationScreen = {
             type: jsPsychHtmlKeyboardResponse,
@@ -104,9 +124,9 @@ for (let condition of conditions) {
             trial_duration: 250,
         }
         timeline.push(wordDisplay, fixationScreen);
-
     }
 }
+
 
 //Likert
 let likert = [
@@ -121,6 +141,10 @@ let likert = [
 
 let survey = {
     type: jsPsychSurveyLikert,
+    preamble: `
+    <h1>Task 3 of 3</h1>
+    <p>Please answer the following questions...</p>
+    `,
     questions: [
         { prompt: "Government is almost always wasteful and inefficient.", labels: likert },
         { prompt: "Immigrants today strengthen our country because of their hard work and talents.", labels: likert },
@@ -133,7 +157,10 @@ let survey = {
         { prompt: "Poor people today have it easy because they can get government benefits without doing anything good in return.", labels: likert },
         { prompt: "Homosexuality should be accepted by society.", labels: likert },
 
-    ]
+    ],
+    data: {
+        collect: true,
+    },
 }
 
 timeline.push(survey);
@@ -146,6 +173,8 @@ let resultsTrial = {
     stimulus: `
         <h1>Please wait...</h1>
         <p>We are saving the results of your inputs.</p>
+
+        
         <div class='loading'></div>
         `,
     on_start: function () {
@@ -157,9 +186,10 @@ let resultsTrial = {
         let results = jsPsych.data
             .get()
             .filter({ collect: true })
-            .ignore(['stimulus', 'trial_type', 'plugin_version', 'collect'])
+            .ignore(['plugin_version', 'collect', 'time_elapsed'])
             .csv();
         let participantId = new Date().toISOString().replace(/T/, '-').replace(/\..+/, '').replace(/:/g, '-');
+
         let isLocalHost = window.location.href.includes('localhost');
 
         let destination = '/save';
@@ -187,6 +217,13 @@ let resultsTrial = {
 }
 timeline.push(resultsTrial);
 
+
+
+let exitFullScreenTrial = {
+    type: jsPsychFullscreen,
+    fullscreen_mode: false
+};
+timeline.push(exitFullScreenTrial);
 
 //Debrief
 let debriefTrial = {

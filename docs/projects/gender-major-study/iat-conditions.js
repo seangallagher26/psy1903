@@ -23,7 +23,7 @@ let words = {
 // when developing your experiment you can reduce this number
 // to expedite the process of testing the experiment
 // Always set the count to an even number
-let count = 4; //CHANGE THIS TO 36 FOR FINAL VERSION
+let count = 36; //CHANGE THIS TO 36 FOR FINAL VERSION
 
 
 

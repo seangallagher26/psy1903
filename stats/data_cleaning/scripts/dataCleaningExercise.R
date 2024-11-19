@@ -27,9 +27,9 @@ for(column_name in column_names) {
 
 str(iat_data2)
 
-calculate_IAT_dscore <- function() {
+calculate_IAT_dscore <- function(data) {
   # Step 1: Filter out trials <300 & >3000
- tmp <- iat_data2[iat_data2$rt > 300 & iat_data2$rt < 3000,]
+ tmp <- data[data$rt > 300 & data$rt < 3000,]
   # Step 2: Separate congruent & incongruent
   congruent_trials <- tmp[tmp$expectedCategoryAsDisplayed == "science or men" |
                             tmp$expectedCategoryAsDisplayed == "liberal arts or women",]
@@ -72,7 +72,7 @@ calculate_IAT_dscore <- function() {
    tmp <- read.csv(file)
    participant_ID <- tools::file_path_sans_ext(basename(file))
    dScores[i,"participant_ID"] <- participant_ID
-   dScores[i, "d_score"] <- calculate_IAT_dscore()
+   dScores[i, "d_score"] <- calculate_IAT_dscore(tmp)
    rm(tmp)
    i <- i + 1
  }
@@ -90,3 +90,29 @@ calculate_IAT_dscore <- function() {
  
  ## Outside of the for loop, save the new dScores data frame using write.csv() into your data_cleaning/data subdirectory:
  write.csv(dScores,"~/Desktop/psy1903/stats/data_cleaning/data/participant_dScores.csv", row.names = FALSE)
+ 
+ #### Questionnaire Scoring -----------------------------------------------------
+ 
+ ## Read in data file to a data frame called iat_test
+ iat_test <- read.csv("~/Desktop/psy1903/stats/data_cleaning/data/my-iat-test-data.csv")
+ 
+ ## Extract questionnaire data
+ json_data <- iat_test[iat_test$trialType == "Questionnaire", "response"]
+ 
+ ## Use fromJSON to Convert from JSON to data frame
+ questionnaire <- fromJSON(json_data)
+ str(questionnaire)
+ questionnaire <- as.data.frame(questionnaire)
+ 
+ ## Convert to numeric
+ questionnaire <- as.data.frame(lapply(questionnaire, as.numeric))
+ 
+ 
+ ## Reverse score if necessary
+ rev_items <- c("question1","question3","question5","question7","question9")
+ for (rev_item in rev_items) {
+   questionnaire[,rev_item] <- 8 - questionnaire[,rev_item]
+ }
+ 
+ ## Calculate mean or sum score
+ score <- rowMeans(questionnaire, na.rm = TRUE)

@@ -185,5 +185,50 @@ calculate_IAT_dscore <- function(data) {
  dScores[,"whichPrime"] <- as.factor(dScores[,"whichPrime"])
  dScores[,"d_score"] <- as.numeric(dScores[,"d_score"])
  dScores[,"questionnaire"] <- as.numeric(dScores[,"questionnaire"])
-
  
+ iat_anova <- aov(dScores$d_score ~ dScores$whichPrime, dScores)
+summary(iat_anova)
+
+TukeyHSD(iat_anova, conf.level=.95)
+
+cor.test(dScores$d_score, dScores$questionnaire)
+ 
+hist(dScores$d_score,
+     main = "Distribution of D-Scores",
+     xlab = "D-Scores",
+     ylab = "Frequency")
+
+library(ggplot2)
+
+dScores2 <- as.data.frame(dScores)
+dim(dScores2)
+
+ggplot(dScores, aes(x=d_score)) +
+  geom_histogram(binwidth = 0.1, fill = "skyblue", color = "black") +
+  labs(title = "Distribution of D-Scores", x = "D-Scores", y = "Frequency") +
+  theme_classic() +
+  facet_wrap(~dScores$whichPrime)
+
+ggplot(dScores, aes(x=whichPrime, y=d_score)) +
+  geom_boxplot() +
+  labs(title = "Effect of Prime on D-Scores", x = "Prime Condition", y = "Frequency") +
+  theme_classic() +
+  theme(legend.position = "none") +
+  scale_x_discrete(labels = c("Atypical","Stereotypical"))
+
+ggplot(dScores, aes(x=questionnaire, y=d_score)) +
+  geom_point() +
+  labs(title = "Correlation Between Questionnaire and D-Scores", x = "Questionnaire", y = "D-Scores") +
+  theme_classic() +
+  geom_smooth(method = "lm")
+
+
+ggplot(dScores, aes(x=whichPrime, y=d_score)) +
+  geom_boxplot(fill = c("orange", "skyblue")) +
+  labs(title = "Effect of Prime on D-Scores", x = "Prime Condition", y = "Frequency") +
+  theme(legend.position = "none", 
+        text=element_text(family="mono", size = 15, color = "maroon")) +
+  scale_x_discrete(labels = c("Atypical","Stereotypical")) +
+  coord_cartesian(ylim = c(-1,1)) 
+
+  

@@ -5,7 +5,7 @@ library(ggplot2)
 
 #### D-score Function --------------------------------
 calculate_IAT_dscore <- function(data) {
-  tmp <- data[data$rt > 300 & data$rt < 5000,]
+  tmp <- data[data$rt > 300 & data$rt < 5000 & data$correct==TRUE,]
   congruent_trials <- tmp[tmp$expectedCategoryAsDisplayed == "science or men" |
                             tmp$expectedCategoryAsDisplayed == "liberal arts or women",]
   incongruent_trials <- tmp[tmp$expectedCategoryAsDisplayed == "science or women" |
@@ -33,21 +33,18 @@ score_questionnaire <- function(data) {
 
 #### For Loop ------------------------------------------
 i = 1
-file <- files_list[[1]]
 for (file in files_list) {
   tmp <- read.csv(file)
   column_names <- c("expectedCategoryAsDisplayed", "expectedCategory", "leftCategory", "rightCategory")
+  tmp[,"correct"] <- as.logical(tmp[,"correct"])
   for(column_name in column_names) {
     tmp[,column_name] <- as.factor(tmp[,column_name])
   }
-  tmp[, "whichPrime"] <- as.factor(tmp[,"whichPrime"])
   participant_ID <- tools::file_path_sans_ext(basename(file))
-  whichPrime <- tmp[1,"whichPrime"]
+  dScores[i, "whichPrime"] <- tmp[tmp$trialType == "prime", "whichPrime"]  
   dScores[i,"participant_ID"] <- participant_ID
   dScores[i, "d_score"] <- calculate_IAT_dscore(tmp)
-  dScores[i, "whichPrime"] <- levels(whichPrime)[2]
   dScores[i, "questionnaire"] <- score_questionnaire(tmp)
-  
   rm(tmp)
   i <- i + 1
 }
